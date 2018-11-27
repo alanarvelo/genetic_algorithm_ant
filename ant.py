@@ -3,8 +3,9 @@ import random
 import json
 import copy
 
+from fsa import FSA
 
-class Ant():
+class Ant(FSA):
     # Ant Class with functionality to create an Ant from an FSA, walk the trail, and return the score.
     # score/fitness = # food eaten in 200 moves.
 
@@ -13,22 +14,22 @@ class Ant():
     dir_col = [0, 1, 0, -1]
     
 
-    def __init__(self, FSA, max_moves):
+    def __init__(self, genome, max_moves):
         self.max_moves = max_moves
         self.moves = 0
         self.eaten = 0
-        self.FSA = FSA
-        self.current_state = self.FSA.start_state
+        self.fenotype = FSA(genome)
+        self.current_state = self.fenotype.start_state
         self.memorize_map()
 
        
     def _reset(self):
         self.row = self.row_start
         self.col = self.col_start
-        self.dir = self.FSA.start_state
+        self.dir = self.fenotype.start_state
         self.moves = 0
         self.eaten = 0
-        self.current_state = self.FSA.start_state
+        self.current_state = self.fenotype.start_state
         self.matrix_state = copy.deepcopy(self.matrix)
         self.matrix_exc2 = copy.deepcopy(self.matrix_state)
         
@@ -81,19 +82,15 @@ class Ant():
     
     
     def run(self):
+        # walk the ant until max_moves or until all food is eaten
         self._reset()
-#         print("start state: {} \n \
-#                 food: {} - {} \n \
-#                 no food: {} - {} \n".format(ant.FSA.start_state, 
-#                                             ant.FSA.actions_food, ant.FSA.transitions_food, 
-#                                             ant.FSA.actions_no_food, ant.FSA.transitions_no_food))
         while (self.moves < self.max_moves) and (self.eaten < self.total_food):
             if self.sense_food():
-                self.action_to_take(self.FSA.actions_food[self.current_state % self.FSA.num_states ])()
-                self.current_state = self.FSA.new_states_food[self.current_state % self.FSA.num_states ]
+                self.action_to_take(self.fenotype.actions_food[self.current_state % self.fenotype.num_states ])()
+                self.current_state = self.fenotype.new_states_food[self.current_state % self.fenotype.num_states ]
             else:
-                self.action_to_take(self.FSA.actions_no_food[self.current_state % self.FSA.num_states ])()
-                self.current_state = self.FSA.new_states_no_food[self.current_state % self.FSA.num_states ]
+                self.action_to_take(self.fenotype.actions_no_food[self.current_state % self.fenotype.num_states ])()
+                self.current_state = self.fenotype.new_states_no_food[self.current_state % self.fenotype.num_states ]
             self.moves += 1
             self.matrix_state[self.row][self.col] = str(self.current_state)
             self.matrix_dir[self.row][self.col] = str(self.dir)

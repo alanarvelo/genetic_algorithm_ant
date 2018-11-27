@@ -11,14 +11,19 @@ class FSA:
     """ FSA Class. Takes a list of binaries, genomes, and decodes the state and actions to be taken — fenotype. """
     
     def __init__(self, genome):
-        self.num_states = int((len(genome)-2)/12)
-        self.actions_food = []
-        self.new_states_food = []
-        self.actions_no_food = []
+        self.num_states = self.get_number_of_states(genome)
         self.new_states_no_food = []
-        self.start_state = bits2int(genome[0:2])
+        self.actions_no_food = []
+        self.new_states_food = []
+        self.actions_food = []
+        self.start_state = self.get_start_state(genome)
         self.create_fenotype(genome)
-        
+    
+    def get_number_of_states(self, genome):
+        return int((len(genome)-2)/12)
+    
+    def get_start_state(self, genome):
+        return bits2int(genome[0:2])
     
     def create_fenotype(self, genome):
         for s in range(0, self.num_states):
