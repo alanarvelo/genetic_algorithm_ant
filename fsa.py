@@ -20,15 +20,15 @@ class FSA:
         self.create_fenotype(genome)
     
     def get_number_of_states(self, genome):
-        return int((len(genome)-2)/12)
+        return int((len(genome) - 4)/12)
     
     def get_start_state(self, genome):
-        return bits2int(genome[0:2])
+        return bits2int(genome[0:4])
     
     def create_fenotype(self, genome):
         for s in range(0, self.num_states):
-            self.new_states_no_food.insert(s, bits2int( genome[(2 + s*12):(6 + s*12)] ) )
-            self.actions_no_food.insert(s, bits2int( genome[(6 + s*12):(8 + s*12)] ) )
+            self.new_states_no_food.insert(s, bits2int( genome[(4 + s*12):(8 + s*12)] ) )
+            self.actions_no_food.insert(s, bits2int( genome[(8 + s*12):(10 + s*12)] ) )
 
-            self.new_states_food.insert(s, bits2int( genome[(8 + s*12):(12 + s*12)] ) )
-            self.actions_food.insert(s, bits2int( genome[(12 + s*12):(14 + s*12)] ) )
+            self.new_states_food.insert(s, bits2int( genome[(10 + s*12):(14 + s*12)] ) )
+            self.actions_food.insert(s, bits2int( genome[(14 + s*12):(16 + s*12)] ) )

@@ -5,7 +5,7 @@ import copy
 
 from fsa import FSA
 
-class Ant(FSA):
+class Ant():
     # Ant Class with functionality to create an Ant from an FSA, walk the trail, and return the score.
     # score/fitness = # food eaten in 200 moves.
 
@@ -26,7 +26,7 @@ class Ant(FSA):
     def _reset(self):
         self.row = self.row_start
         self.col = self.col_start
-        self.dir = self.fenotype.start_state
+        self.dir = self.fenotype.start_state % 4
         self.moves = 0
         self.eaten = 0
         self.current_state = self.fenotype.start_state
